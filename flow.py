@@ -5,8 +5,8 @@ DOMAIN = 'domain.com'  # Replace with your actual domain
 PORT = 12345  # Replace with the actual port number
 username = 'username' # Replace with your actual username
 password = 'password' # Replace with your actual password
-protocol = 'vless'
-flow = "xtls-rprx-vision"
+protocol = 'vless' # Replace with your actual protocol
+flow = "xtls-rprx-vision" # Replace with your actual flow
 
 def get_access_token(username, password):
     url = f'https://{DOMAIN}:{PORT}/api/admin/token'
@@ -83,7 +83,7 @@ if access_token:
                 if flow_select(access_token, user['username'], protocol, flow):
                     print(f"User {user['username']} flow updated successfully.")
                 else:
-                    print(f"Can't change flow for user {user['username']}.")
+                    print(f'flow for user {username} already is {flow}')
         print("All users modified successfully.")    
     else:
         print("Failed to retrieve the users list.")
