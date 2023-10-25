@@ -59,6 +59,19 @@ def flow_select(access_token, username, protocol, flow):
             # Modify 'links' and 'subscription_url'
             user_details['links'] = []
             user_details['subscription_url'] = ""
+            if user_details['status'] != "disabled":
+                user_details['status'] = "active"
+
+            # Create a list of keys to remove
+            keys_to_remove = []
+            for inbound_protocol in user_details.get('inbounds', {}):
+                if not user_details['inbounds'][inbound_protocol]:
+                    keys_to_remove.append(inbound_protocol)
+
+            # Remove the keys outside of the loop
+            for key in keys_to_remove:
+                user_details['inbounds'].pop(key, None)
+                user_details['proxies'].pop(key, None)
 
             response = requests.put(url, json=user_details, headers=headers)
             response.raise_for_status()
@@ -67,7 +80,7 @@ def flow_select(access_token, username, protocol, flow):
             logging.error(f'flow for user {username} already is {flow}')
             return False
     except requests.exceptions.RequestException as e:
-        logging.error(f'Error occurred while modifying user data limit: {e}')
+        logging.error(f'Error occurred while modifying user: {e}')
         return False
 
 # Configure logging settings
